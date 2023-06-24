@@ -24,8 +24,7 @@ async function updateContext(telegramId, messages) {
       'UPDATE users SET messages = COALESCE(messages, \'[]\') || $2::jsonb WHERE telegram_id = $1 RETURNING messages',
       [telegramId, JSON.stringify(messages)]);
     let updatedMessages = result.rows[0].messages;
-    console.log(updatedMessages.length)
-
+    
     if (updatedMessages.length > 16) {
       updatedMessages = updatedMessages.slice(Math.floor(updatedMessages.length / 2));
       await client.query(
