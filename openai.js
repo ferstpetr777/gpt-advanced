@@ -37,10 +37,19 @@ class OpenAI {
 
       return response.data.choices[0].message
     } catch (err) {
+      if (err.response && err.response.status === 503){
+        console.log('Произошла ошибка. Пожалуйста, повторите попытку еще раз');
+        return {
+          content: 'Произошла ошибка. Пожалуйста, повторите попытку еще раз',
+        }
+      }
       if (err.response && err.response.status === 429) {
         console.log('Превышен лимит запросов в минуту. Повторите попытку позже');
       } else {
         console.error('Произошла ошибка при запросе к API OpenAI:', err.message);
+        return {
+          content: 'Произошла ошибка при запросе к API OpenAI',
+        }
       }
     }
   }
