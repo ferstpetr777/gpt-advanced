@@ -38,18 +38,15 @@ class OpenAI {
       return response.data.choices[0].message
     } catch (err) {
       if (err.response && err.response.status === 503){
-        console.log('Произошла ошибка. Пожалуйста, повторите попытку еще раз');
-        return {
-          content: 'Произошла ошибка. Пожалуйста, повторите попытку еще раз',
-        }
+        console.error('Сервер OpenAI в данный момент перегружен', err.message);
+        return { content: 'Сервер OpenAI в данный момент перегружен. Пожалуйста, повторите попытку еще раз' }
       }
       if (err.response && err.response.status === 429) {
-        console.log('Превышен лимит запросов в минуту. Повторите попытку позже');
+        console.error('Превышен лимит запросов в минуту', err.message);
+        return { content: 'Превышен лимит запросов в минуту. Повторите попытку позже' }
       } else {
         console.error('Произошла ошибка при запросе к API OpenAI:', err.message);
-        return {
-          content: 'Произошла ошибка при запросе к API OpenAI',
-        }
+        return { content: 'Произошла ошибка при запросе к API OpenAI. Повторите попытку еще раз' }
       }
     }
   }
@@ -64,7 +61,7 @@ class OpenAI {
 
       return response.data.data[0].url;
     } catch (err) {
-      console.error('Произошла ошибка при запросе к API OpenAI:', err.message);
+      console.error('Произошла ошибка при запросе к API OpenAI для генерации изображения:', err.message);
     }
   }
 
@@ -81,9 +78,9 @@ class OpenAI {
       return response.data.choices[0].message;
     } catch (err) {
       if (err.response && err.response.status === 429) {
-        console.log('Превышен лимит запросов в минуту. Повторите попытку позже');
+        console.error('Превышен лимит запросов в минуту', err.message);
       } else {
-        console.error('Произошла ошибка при запросе к API OpenAI:', err.message);
+        console.error('Произошла ошибка при запросе к API OpenAI для YouTube Summary', err.message);
       }
     }
   }
