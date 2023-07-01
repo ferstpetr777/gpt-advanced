@@ -164,7 +164,6 @@ bot.on(message('text'), async ctx => {
       }
 
       const processingMessage = await ctx.reply(code('Бот обрабатывает ваш запрос...'));
-      console.log("CI/CD test succesful.");
       const userMessage = { role: openai.roles.USER, content: ctx.message.text };
       const updMsgs = await updateContext(telegramId, userMessage);
 
