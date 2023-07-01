@@ -1,0 +1,24 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 158.160.105.98
+          username: scroogev
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - run: |
+          cd gpt-advanced
+          git pull origin main
+          sudo docker stop gpt-advanced || true
+          sudo docker build -t gpt-advanced .
+          sudo docker run -d --rm --name gpt-advanced gpt-advanced
