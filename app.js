@@ -157,6 +157,7 @@ bot.on(message('text'), async ctx => {
     if (ctx.session.chatMode === 'conversation') {
       if (youtubeUrlRegex.test(ctx.message.text)) {
         const processingMessage = await ctx.reply(code('Обрабатываем ваше видео...'));
+        console.log('Проверка CI/CD процесса');
         const summary = await summarize(ctx.message.text);
         ctx.deleteMessage(processingMessage.message_id);
         ctx.reply(summary);
