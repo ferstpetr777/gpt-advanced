@@ -29,7 +29,16 @@ async function updateContext(telegramId, messages) {
       updatedMessages = updatedMessages.slice(Math.floor(updatedMessages.length / 2));
       await client.query(
         'UPDATE users SET messages = $2::jsonb WHERE telegram_id = $1',
-        [telegramId, JSON.stringify(updatedMessages)]);
+        [telegramId, JSON.stringify(updatedMessages)]
+      );
+    }
+
+    if (updatedMessages.some(message => message.content === undefined)) {
+      updatedMessages = updatedMessages.filter(message => message.content !== undefined);
+      await client.query(
+        'UPDATE users SET messages = $2::jsonb WHERE telegram_id = $1',
+        [telegramId, JSON.stringify(updatedMessages)]
+      );
     }
 
     return updatedMessages;
